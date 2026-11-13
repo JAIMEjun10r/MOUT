@@ -3,12 +3,12 @@ import { buildUser } from '../../support/factories/user.js';
 
 describe('API de produtos', () => {
   const apiUrl = Cypress.expose('apiUrl');
-  let adminUserId;
+  let createdUserId;
   let authorization;
   let createdProductId;
 
   beforeEach(() => {
-    adminUserId = undefined;
+    createdUserId = undefined;
     authorization = undefined;
     createdProductId = undefined;
   });
@@ -18,8 +18,8 @@ describe('API de produtos', () => {
       cy.deleteProductByApi(createdProductId, authorization);
     }
 
-    if (adminUserId) {
-      cy.deleteUserByApi(adminUserId);
+    if (createdUserId) {
+      cy.deleteUserByApi(createdUserId);
     }
   });
 
@@ -28,7 +28,7 @@ describe('API de produtos', () => {
     const product = buildProduct();
 
     cy.createUserByApi(adminUser).then(({ _id }) => {
-      adminUserId = _id;
+      createdUserId = _id;
     });
 
     cy.loginByApi(adminUser).then((loginResponse) => {
@@ -67,6 +67,59 @@ describe('API de produtos', () => {
             ...product,
             _id: createdProductId,
           });
+        });
+      });
+    });
+  });
+
+  it('[API-007] impede o cadastro de produto sem token', () => {
+    const product = buildProduct();
+
+    cy.log('POST /produtos sem token de acesso');
+    cy.request({
+      method: 'POST',
+      url: `${apiUrl}/produtos`,
+      body: product,
+      failOnStatusCode: false,
+      log: false,
+    }).then((response) => {
+      expect(response.status).to.eq(401);
+      expect(response.isOkStatusCode).to.be.false;
+      expect(response.headers['content-type']).to.include('application/json');
+      expect(response.body).to.deep.equal({
+        message: 'Token de acesso ausente, inválido, expirado ou usuário do token não existe mais',
+      });
+    });
+  });
+
+  it('[API-008] impede o cadastro de produto por usuário comum', () => {
+    const regularUser = buildUser();
+    const product = buildProduct();
+
+    cy.createUserByApi(regularUser).then(({ _id }) => {
+      createdUserId = _id;
+    });
+
+    cy.loginByApi(regularUser).then((loginResponse) => {
+      authorization = loginResponse.body.authorization;
+
+      expect(loginResponse.status).to.eq(200);
+      expect(authorization).to.be.a('string').and.not.be.empty;
+
+      cy.log('POST /produtos como usuário não administrador');
+      cy.request({
+        method: 'POST',
+        url: `${apiUrl}/produtos`,
+        headers: { Authorization: authorization },
+        body: product,
+        failOnStatusCode: false,
+        log: false,
+      }).then((response) => {
+        expect(response.status).to.eq(403);
+        expect(response.isOkStatusCode).to.be.false;
+        expect(response.headers['content-type']).to.include('application/json');
+        expect(response.body).to.deep.equal({
+          message: 'Rota exclusiva para administradores',
         });
       });
     });

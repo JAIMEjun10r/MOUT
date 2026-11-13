@@ -14,6 +14,8 @@ manter rastreabilidade estável entre estratégia, specs e resultados.
 | API-004       | Swagger ServeRest — `POST /usuarios`      | `users.cy.js` — e-mail duplicado                   | automated | Cria a pré-condição, valida o erro de duplicidade e remove o usuário original ao final.              |
 | API-005       | Swagger ServeRest — `PUT /usuarios/{_id}` | `users.cy.js` — edição e consulta de usuário       | automated | Altera todos os campos, consulta o mesmo ID e compara integralmente os dados persistidos.            |
 | API-006       | Swagger ServeRest — `POST /login`         | `authentication.cy.js` — login válido              | automated | Cria um usuário, valida mensagem e estrutura do token Bearer e remove a pré-condição ao final.       |
+| API-007       | Swagger ServeRest — `POST /produtos`      | `products.cy.js` — cadastro sem token              | automated | Valida que a API rejeita a criação sem credencial e não deixa dados para limpeza.                    |
+| API-008       | Swagger ServeRest — `POST /produtos`      | `products.cy.js` — usuário comum                   | automated | Autentica um usuário não administrador, valida a proibição e remove a pré-condição.                  |
 
 ## Estados possíveis
 
