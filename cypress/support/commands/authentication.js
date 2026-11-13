@@ -15,3 +15,10 @@ Cypress.Commands.add('registerUserByUi', (user) => {
 
   cy.get(byTestId('cadastrar')).click();
 });
+
+Cypress.Commands.add('loginByUi', ({ email, password }) => {
+  cy.visit('/login');
+  cy.get(byTestId('email')).type(email);
+  cy.get(byTestId('senha')).type(password, { log: false });
+  cy.get(byTestId('entrar')).click();
+});

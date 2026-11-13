@@ -36,4 +36,24 @@ describe('Autenticação de usuário', () => {
     cy.location('pathname').should('eq', '/home');
     cy.contains('h1', 'Serverest Store').should('be.visible');
   });
+
+  it('[FRONT-E2E-002] mantém o usuário no login quando as credenciais são inválidas', () => {
+    const invalidCredentials = buildUser();
+
+    cy.intercept('POST', '**/login').as('invalidLogin');
+
+    cy.loginByUi(invalidCredentials);
+
+    cy.wait('@invalidLogin').then(({ request, response }) => {
+      expect(request.body).to.deep.equal({
+        email: invalidCredentials.email,
+        password: invalidCredentials.password,
+      });
+      expect(response.statusCode).to.eq(401);
+      expect(response.body.message).to.eq('Email e/ou senha inválidos');
+    });
+
+    cy.location('pathname').should('eq', '/login');
+    cy.get('[role="alert"]').should('be.visible').and('contain', 'Email e/ou senha inválidos');
+  });
 });
