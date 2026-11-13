@@ -38,6 +38,10 @@ Cypress.Commands.add('loginByUi', ({ email, password }) => {
   cy.get(byTestId('entrar')).click();
 });
 
+Cypress.Commands.add('logoutByUi', () => {
+  cy.get(byTestId('logout')).should('be.visible').click();
+});
+
 Cypress.Commands.add('loginWithSession', ({ email, password, nome, administrador }) => {
   cy.session(
     ['serverest', email, administrador],

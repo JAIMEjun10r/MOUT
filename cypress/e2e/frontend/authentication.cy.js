@@ -102,4 +102,35 @@ describe('Autenticação de usuário', () => {
     cy.location('pathname').should('eq', '/cadastrarusuarios');
     cy.get('[role="alert"]').should('be.visible').and('contain', 'Este email já está sendo usado');
   });
+
+  it('[FRONT-E2E-008] encerra a sessão e protege a rota da loja', () => {
+    const user = buildUser();
+
+    cy.createUserByApi(user).then(({ _id }) => {
+      createdUserId = _id;
+    });
+
+    cy.intercept('GET', '**/produtos').as('loadProducts');
+
+    cy.loginWithSession(user);
+    cy.visit('/home');
+
+    cy.location('pathname').should('eq', '/home');
+    cy.wait('@loadProducts').its('response.statusCode').should('eq', 200);
+    cy.contains('h1', 'Serverest Store').should('be.visible');
+
+    cy.logoutByUi();
+
+    cy.location('pathname').should('eq', '/login');
+    cy.window().should((window) => {
+      expect(window.localStorage.getItem('serverest/userEmail')).to.be.null;
+      expect(window.localStorage.getItem('serverest/userToken')).to.be.null;
+      expect(window.localStorage.getItem('serverest/userNome')).to.be.null;
+    });
+
+    cy.visit('/home');
+
+    cy.location('pathname').should('eq', '/login');
+    cy.contains('h1', 'Serverest Store').should('not.exist');
+  });
 });

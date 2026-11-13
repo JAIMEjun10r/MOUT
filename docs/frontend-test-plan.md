@@ -10,7 +10,7 @@ do ServeRest. A primeira etapa cobre três fluxos distintos e de alto valor:
 3. pesquisa e adição de um produto à lista de compras.
 
 A cobertura complementar inclui as validações de campos obrigatórios, a regra de unicidade do
-e-mail no cadastro, a pesquisa sem resultados e a visualização dos detalhes do produto.
+e-mail no cadastro, a pesquisa sem resultados, os detalhes do produto e a proteção de sessão.
 
 Os casos usam os `data-testid` oferecidos pela aplicação, interceptam as requisições antes das ações
 e validam resultados de negócio tanto na rede quanto na interface.
@@ -42,5 +42,4 @@ e validam resultados de negócio tanto na rede quanto na interface.
 ## Próximos candidatos de frontend
 
 - incremento, decremento e limpeza da lista;
-- logout e proteção de rotas;
 - fluxo de administrador para cadastro e listagem de produtos.
