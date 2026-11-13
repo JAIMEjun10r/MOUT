@@ -45,4 +45,28 @@ describe('API de usuários', () => {
       });
     });
   });
+
+  it('[API-004] impede o cadastro com e-mail duplicado', () => {
+    const user = buildUser();
+
+    cy.createUserByApi(user).then(({ _id }) => {
+      createdUserId = _id;
+    });
+
+    cy.log('POST /usuarios com e-mail já cadastrado');
+    cy.request({
+      method: 'POST',
+      url: `${apiUrl}/usuarios`,
+      body: user,
+      failOnStatusCode: false,
+      log: false,
+    }).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.isOkStatusCode).to.be.false;
+      expect(response.headers['content-type']).to.include('application/json');
+      expect(response.body).to.deep.equal({
+        message: 'Este email já está sendo usado',
+      });
+    });
+  });
 });

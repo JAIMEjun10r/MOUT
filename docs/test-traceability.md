@@ -11,6 +11,7 @@ manter rastreabilidade estável entre estratégia, specs e resultados.
 | API-001       | `Senior QA Test (1).pdf`, p. 1 — API      | `users.cy.js` — cadastro e consulta de usuário     | automated | Cria dados únicos, valida os contratos de criação e consulta e remove o registro ao final.           |
 | API-002       | `Senior QA Test (1).pdf`, p. 1 — API      | `authentication.cy.js` — login inválido            | automated | Valida o contrato de erro, os cabeçalhos de segurança e evita registrar a senha no Command Log.      |
 | API-003       | `Senior QA Test (1).pdf`, p. 1 — API      | `products.cy.js` — cadastro e consulta de produto  | automated | Autentica um administrador, valida criação e consulta e remove produto e usuário na ordem correta.   |
+| API-004       | Swagger ServeRest — `POST /usuarios`      | `users.cy.js` — e-mail duplicado                   | automated | Cria a pré-condição, valida o erro de duplicidade e remove o usuário original ao final.              |
 
 ## Estados possíveis
 
