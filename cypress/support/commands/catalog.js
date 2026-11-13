@@ -1,4 +1,6 @@
 const byTestId = (testId) => `[data-testid="${testId}"]`;
+const getProductCardByName = (productName) =>
+  cy.contains('.card-title', productName).parents('.card');
 
 Cypress.Commands.add('searchProductByUi', (productName) => {
   cy.get(byTestId('pesquisar')).clear();
@@ -7,9 +9,13 @@ Cypress.Commands.add('searchProductByUi', (productName) => {
 });
 
 Cypress.Commands.add('addProductToListByUi', (productName) => {
-  cy.contains('.card-title', productName)
-    .parents('.card')
-    .within(() => {
-      cy.get(byTestId('adicionarNaLista')).click();
-    });
+  getProductCardByName(productName).within(() => {
+    cy.get(byTestId('adicionarNaLista')).click();
+  });
+});
+
+Cypress.Commands.add('openProductDetailsByUi', (productName) => {
+  getProductCardByName(productName).within(() => {
+    cy.contains(byTestId('product-detail-link'), 'Detalhes').click();
+  });
 });

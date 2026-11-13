@@ -1,4 +1,25 @@
 const getApiUrl = () => Cypress.expose('apiUrl');
+const isNamePreservedInQuery = (productName) =>
+  new URL(`/produtos?nome=${productName}`, getApiUrl()).searchParams.get('nome') === productName;
+
+const getAvailableProduct = (predicate, assertionLabel) => {
+  return cy
+    .request({
+      method: 'GET',
+      url: `${getApiUrl()}/produtos`,
+      log: false,
+    })
+    .then((response) => {
+      expect(response.status).to.eq(200);
+
+      const product = response.body.produtos.find(
+        (candidate) => candidate.quantidade > 0 && predicate(candidate),
+      );
+      expect(product, assertionLabel).to.exist;
+
+      return product;
+    });
+};
 
 Cypress.Commands.add('createProductByApi', (product, authorization) => {
   Cypress.log({ name: 'createProductByApi', message: product.nome });
@@ -22,20 +43,16 @@ Cypress.Commands.add('createProductByApi', (product, authorization) => {
 Cypress.Commands.add('getAvailableProductByApi', () => {
   Cypress.log({ name: 'getAvailableProductByApi' });
 
-  return cy
-    .request({
-      method: 'GET',
-      url: `${getApiUrl()}/produtos`,
-      log: false,
-    })
-    .then((response) => {
-      expect(response.status).to.eq(200);
+  return getAvailableProduct(() => true, 'produto disponível para o cenário');
+});
 
-      const product = response.body.produtos.find(({ quantidade }) => quantidade > 0);
-      expect(product, 'produto disponível para o cenário').to.exist;
+Cypress.Commands.add('getSearchableProductByApi', () => {
+  Cypress.log({ name: 'getSearchableProductByApi' });
 
-      return product;
-    });
+  return getAvailableProduct(
+    ({ nome }) => isNamePreservedInQuery(nome),
+    'produto disponível com nome preservado na query string',
+  );
 });
 
 Cypress.Commands.add('deleteProductByApi', (productId, authorization) => {

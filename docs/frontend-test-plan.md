@@ -9,8 +9,8 @@ do ServeRest. A primeira etapa cobre três fluxos distintos e de alto valor:
 2. rejeição de credenciais inválidas;
 3. pesquisa e adição de um produto à lista de compras.
 
-A cobertura complementar inclui as validações de campos obrigatórios e da regra de unicidade do
-e-mail no cadastro de usuário.
+A cobertura complementar inclui as validações de campos obrigatórios, a regra de unicidade do
+e-mail no cadastro, a pesquisa sem resultados e a visualização dos detalhes do produto.
 
 Os casos usam os `data-testid` oferecidos pela aplicação, interceptam as requisições antes das ações
 e validam resultados de negócio tanto na rede quanto na interface.
@@ -36,11 +36,11 @@ e validam resultados de negócio tanto na rede quanto na interface.
 - Os testes não finalizam compras, não criam carrinhos e não alteram produtos nesta etapa.
 - No cadastro vazio, a interface exibe `Password é obrigatório`, combinando o nome do campo em
   inglês com a mensagem em português; o teste preserva o comportamento observado.
+- A busca concatena o nome do produto à URL sem codificação; caracteres reservados, como `#`, podem
+  truncar o valor enviado. O cenário positivo seleciona um nome preservado pela query string.
 
 ## Próximos candidatos de frontend
 
-- pesquisa sem resultados;
-- detalhes de produto;
 - incremento, decremento e limpeza da lista;
 - logout e proteção de rotas;
 - fluxo de administrador para cadastro e listagem de produtos.
