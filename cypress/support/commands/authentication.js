@@ -22,3 +22,43 @@ Cypress.Commands.add('loginByUi', ({ email, password }) => {
   cy.get(byTestId('senha')).type(password, { log: false });
   cy.get(byTestId('entrar')).click();
 });
+
+Cypress.Commands.add('loginWithSession', ({ email, password, nome, administrador }) => {
+  const apiUrl = Cypress.expose('apiUrl');
+
+  cy.session(
+    ['serverest', email, administrador],
+    () => {
+      cy.request({
+        method: 'POST',
+        url: `${apiUrl}/login`,
+        body: { email, password },
+        log: false,
+      }).then(({ status, body }) => {
+        expect(status).to.eq(200);
+        expect(body.authorization).to.be.a('string').and.not.be.empty;
+
+        cy.visit('/login', {
+          onBeforeLoad(window) {
+            window.localStorage.setItem('serverest/userEmail', email);
+            window.localStorage.setItem('serverest/userToken', body.authorization);
+            window.localStorage.setItem('serverest/userNome', nome);
+          },
+        });
+      });
+    },
+    {
+      validate() {
+        cy.getAllLocalStorage().should((storageByOrigin) => {
+          const appStorage = Object.values(storageByOrigin).find((storage) =>
+            Object.hasOwn(storage, 'serverest/userToken'),
+          );
+
+          expect(appStorage, 'armazenamento da aplicação').to.exist;
+          expect(appStorage['serverest/userEmail']).to.eq(email);
+          expect(appStorage['serverest/userToken']).to.be.a('string').and.not.be.empty;
+        });
+      },
+    },
+  );
+});
