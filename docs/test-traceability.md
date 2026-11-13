@@ -16,6 +16,8 @@ manter rastreabilidade estável entre estratégia, specs e resultados.
 | API-006       | Swagger ServeRest — `POST /login`         | `authentication.cy.js` — login válido              | automated | Cria um usuário, valida mensagem e estrutura do token Bearer e remove a pré-condição ao final.       |
 | API-007       | Swagger ServeRest — `POST /produtos`      | `products.cy.js` — cadastro sem token              | automated | Valida que a API rejeita a criação sem credencial e não deixa dados para limpeza.                    |
 | API-008       | Swagger ServeRest — `POST /produtos`      | `products.cy.js` — usuário comum                   | automated | Autentica um usuário não administrador, valida a proibição e remove a pré-condição.                  |
+| API-009       | Swagger ServeRest — `POST /produtos`      | `products.cy.js` — nome duplicado                  | automated | Cria a pré-condição, valida a regra de unicidade e remove produto e administrador ao final.          |
+| API-010       | Swagger ServeRest — rotas de carrinhos    | `carts.cy.js` — ciclo de cancelamento              | automated | Cria e consulta o carrinho, valida o estoque e limpa carrinho, produto e usuário.                    |
 
 ## Estados possíveis
 

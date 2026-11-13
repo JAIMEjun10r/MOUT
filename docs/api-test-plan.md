@@ -31,6 +31,8 @@ fornece IDs individuais.
 - `API-006` valida o login bem-sucedido e a estrutura do token Bearer retornado.
 - `API-007` valida a rejeição do cadastro de produto sem token de acesso.
 - `API-008` valida a autorização ao impedir a operação por usuário não administrador.
+- `API-009` valida a regra de unicidade do nome do produto e o contrato de erro `400`.
+- `API-010` valida criação, consulta e cancelamento do carrinho, incluindo a restauração do estoque.
 
 ## Riscos e decisões
 
@@ -39,11 +41,12 @@ fornece IDs individuais.
 - Os testes não registram tokens e não dependem de usuários ou produtos preexistentes.
 - Vídeos ficam desativados na execução dedicada de API porque specs HTTP não possuem interação visual.
 - Não são executados testes de carga, fuzzing ou ações destrutivas fora dos registros criados pela suíte.
+- A mensagem real de cancelamento informa o reabastecimento do estoque, detalhe ausente no exemplo do
+  Swagger; o teste registra e valida o comportamento observado da API.
 
 ## Próximos candidatos de API
 
 - acesso administrativo com token inválido ou expirado;
 - edição de produtos;
-- carrinho, conclusão e cancelamento de compra;
 - consultas com filtros e recursos inexistentes;
 - validação ampliada de schemas e cabeçalhos de segurança.
