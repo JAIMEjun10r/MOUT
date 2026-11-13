@@ -1,0 +1,13 @@
+node_modules/
+
+# Cypress local configuration and generated artifacts
+cypress.env.json
+artifacts/
+
+# Local logs and operating-system files
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# The assessment source is kept local and is not published with the repository.
+Senior QA Test (1).pdf
