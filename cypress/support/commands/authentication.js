@@ -1,19 +1,34 @@
 const byTestId = (testId) => `[data-testid="${testId}"]`;
 
-Cypress.Commands.add('registerUserByUi', (user) => {
+Cypress.Commands.add('openUserRegistrationByUi', () => {
   cy.visit('/login');
   cy.get(byTestId('cadastrar')).click();
   cy.location('pathname').should('eq', '/cadastrarusuarios');
+});
 
-  cy.get(byTestId('nome')).type(user.nome);
-  cy.get(byTestId('email')).type(user.email);
-  cy.get(byTestId('password')).type(user.password, { log: false });
+Cypress.Commands.add('submitUserRegistrationByUi', (user = {}) => {
+  if (user.nome) {
+    cy.get(byTestId('nome')).type(user.nome);
+  }
+
+  if (user.email) {
+    cy.get(byTestId('email')).type(user.email);
+  }
+
+  if (user.password) {
+    cy.get(byTestId('password')).type(user.password, { log: false });
+  }
 
   if (user.administrador === 'true') {
     cy.get(byTestId('checkbox')).check();
   }
 
   cy.get(byTestId('cadastrar')).click();
+});
+
+Cypress.Commands.add('registerUserByUi', (user) => {
+  cy.openUserRegistrationByUi();
+  cy.submitUserRegistrationByUi(user);
 });
 
 Cypress.Commands.add('loginByUi', ({ email, password }) => {

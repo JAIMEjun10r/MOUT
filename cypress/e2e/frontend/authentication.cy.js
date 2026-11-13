@@ -56,4 +56,50 @@ describe('Autenticação de usuário', () => {
     cy.location('pathname').should('eq', '/login');
     cy.get('[role="alert"]').should('be.visible').and('contain', 'Email e/ou senha inválidos');
   });
+
+  it('[FRONT-E2E-004] informa os campos obrigatórios no cadastro', () => {
+    cy.intercept('POST', '**/usuarios').as('invalidRegistration');
+
+    cy.openUserRegistrationByUi();
+    cy.submitUserRegistrationByUi();
+
+    cy.wait('@invalidRegistration').then(({ request, response }) => {
+      expect(request.body).to.deep.equal({ administrador: 'false' });
+      expect(response.statusCode).to.eq(400);
+      expect(response.body).to.deep.equal({
+        nome: 'nome é obrigatório',
+        email: 'email é obrigatório',
+        password: 'password é obrigatório',
+      });
+    });
+
+    cy.location('pathname').should('eq', '/cadastrarusuarios');
+    cy.get('[role="alert"]').should('have.length', 3);
+    cy.contains('[role="alert"]', 'Nome é obrigatório').should('be.visible');
+    cy.contains('[role="alert"]', 'Email é obrigatório').should('be.visible');
+    cy.contains('[role="alert"]', 'Password é obrigatório').should('be.visible');
+  });
+
+  it('[FRONT-E2E-005] impede o cadastro com e-mail já utilizado', () => {
+    const existingUser = buildUser();
+
+    cy.createUserByApi(existingUser).then(({ _id }) => {
+      createdUserId = _id;
+    });
+
+    cy.intercept('POST', '**/usuarios').as('duplicateRegistration');
+
+    cy.registerUserByUi(existingUser);
+
+    cy.wait('@duplicateRegistration').then(({ request, response }) => {
+      expect(request.body).to.deep.equal(existingUser);
+      expect(response.statusCode).to.eq(400);
+      expect(response.body).to.deep.equal({
+        message: 'Este email já está sendo usado',
+      });
+    });
+
+    cy.location('pathname').should('eq', '/cadastrarusuarios');
+    cy.get('[role="alert"]').should('be.visible').and('contain', 'Este email já está sendo usado');
+  });
 });
