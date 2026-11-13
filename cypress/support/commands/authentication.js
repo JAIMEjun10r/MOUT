@@ -24,17 +24,10 @@ Cypress.Commands.add('loginByUi', ({ email, password }) => {
 });
 
 Cypress.Commands.add('loginWithSession', ({ email, password, nome, administrador }) => {
-  const apiUrl = Cypress.expose('apiUrl');
-
   cy.session(
     ['serverest', email, administrador],
     () => {
-      cy.request({
-        method: 'POST',
-        url: `${apiUrl}/login`,
-        body: { email, password },
-        log: false,
-      }).then(({ status, body }) => {
+      cy.loginByApi({ email, password }).then(({ status, body }) => {
         expect(status).to.eq(200);
         expect(body.authorization).to.be.a('string').and.not.be.empty;
 

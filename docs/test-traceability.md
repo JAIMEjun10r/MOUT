@@ -3,14 +3,14 @@
 O documento de origem não fornece IDs individuais. Os identificadores abaixo foram criados para
 manter rastreabilidade estável entre estratégia, specs e resultados.
 
-| Caso          | Fonte                                     | Spec/teste                                         | Status       | Observações                                                                                          |
-| ------------- | ----------------------------------------- | -------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------- |
-| FRONT-E2E-001 | `Senior QA Test (1).pdf`, p. 1 — frontend | `authentication.cy.js` — cadastro de usuário comum | automated    | Cria dados únicos pela UI, valida contrato observado e remove o usuário pela API.                    |
-| FRONT-E2E-002 | `Senior QA Test (1).pdf`, p. 1 — frontend | `authentication.cy.js` — login inválido            | automated    | Não altera dados remotos; valida status, mensagem e permanência na rota.                             |
-| FRONT-E2E-003 | `Senior QA Test (1).pdf`, p. 1 — frontend | `catalog.cy.js` — busca e lista de compras         | automated    | Prepara usuário pela API, reutiliza sessão autenticada, escolhe produto disponível e limpa os dados. |
-| API-001       | `Senior QA Test (1).pdf`, p. 1 — API      | `users.cy.js` — cadastro e consulta de usuário     | automated    | Cria dados únicos, valida os contratos de criação e consulta e remove o registro ao final.           |
-| API-002       | `Senior QA Test (1).pdf`, p. 1 — API      | `authentication.cy.js` — login inválido            | automated    | Valida o contrato de erro, os cabeçalhos de segurança e evita registrar a senha no Command Log.      |
-| API-003       | `Senior QA Test (1).pdf`, p. 1 — API      | Cadastro e consulta de produto                     | out-of-scope | Planejado para o incremento autenticado como administrador.                                          |
+| Caso          | Fonte                                     | Spec/teste                                         | Status    | Observações                                                                                          |
+| ------------- | ----------------------------------------- | -------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| FRONT-E2E-001 | `Senior QA Test (1).pdf`, p. 1 — frontend | `authentication.cy.js` — cadastro de usuário comum | automated | Cria dados únicos pela UI, valida contrato observado e remove o usuário pela API.                    |
+| FRONT-E2E-002 | `Senior QA Test (1).pdf`, p. 1 — frontend | `authentication.cy.js` — login inválido            | automated | Não altera dados remotos; valida status, mensagem e permanência na rota.                             |
+| FRONT-E2E-003 | `Senior QA Test (1).pdf`, p. 1 — frontend | `catalog.cy.js` — busca e lista de compras         | automated | Prepara usuário pela API, reutiliza sessão autenticada, escolhe produto disponível e limpa os dados. |
+| API-001       | `Senior QA Test (1).pdf`, p. 1 — API      | `users.cy.js` — cadastro e consulta de usuário     | automated | Cria dados únicos, valida os contratos de criação e consulta e remove o registro ao final.           |
+| API-002       | `Senior QA Test (1).pdf`, p. 1 — API      | `authentication.cy.js` — login inválido            | automated | Valida o contrato de erro, os cabeçalhos de segurança e evita registrar a senha no Command Log.      |
+| API-003       | `Senior QA Test (1).pdf`, p. 1 — API      | `products.cy.js` — cadastro e consulta de produto  | automated | Autentica um administrador, valida criação e consulta e remove produto e usuário na ordem correta.   |
 
 ## Estados possíveis
 

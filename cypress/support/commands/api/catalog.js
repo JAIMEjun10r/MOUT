@@ -18,3 +18,19 @@ Cypress.Commands.add('getAvailableProductByApi', () => {
       return product;
     });
 });
+
+Cypress.Commands.add('deleteProductByApi', (productId, authorization) => {
+  Cypress.log({ name: 'deleteProductByApi', message: productId });
+
+  return cy
+    .request({
+      method: 'DELETE',
+      url: `${getApiUrl()}/produtos/${productId}`,
+      headers: { Authorization: authorization },
+      log: false,
+    })
+    .then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body.message).to.eq('Registro excluído com sucesso');
+    });
+});
