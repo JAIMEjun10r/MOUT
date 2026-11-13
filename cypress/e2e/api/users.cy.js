@@ -69,4 +69,38 @@ describe('API de usuários', () => {
       });
     });
   });
+
+  it('[API-005] edita e consulta um usuário', () => {
+    const originalUser = buildUser();
+    const updatedUser = buildUser();
+
+    cy.createUserByApi(originalUser).then(({ _id }) => {
+      createdUserId = _id;
+
+      cy.log('PUT /usuarios/{_id} com novos dados');
+      cy.request({
+        method: 'PUT',
+        url: `${apiUrl}/usuarios/${createdUserId}`,
+        body: updatedUser,
+        log: false,
+      }).then((updateResponse) => {
+        expect(updateResponse.status).to.eq(200);
+        expect(updateResponse.headers['content-type']).to.include('application/json');
+        expect(updateResponse.body).to.deep.equal({
+          message: 'Registro alterado com sucesso',
+        });
+
+        cy.request({
+          method: 'GET',
+          url: `${apiUrl}/usuarios/${createdUserId}`,
+        }).then((getResponse) => {
+          expect(getResponse.status).to.eq(200);
+          expect(getResponse.body).to.deep.equal({
+            ...updatedUser,
+            _id: createdUserId,
+          });
+        });
+      });
+    });
+  });
 });

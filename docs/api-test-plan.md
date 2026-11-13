@@ -27,6 +27,8 @@ fornece IDs individuais.
 - `API-002` valida erro `401`, corpo da resposta e cabeçalhos de segurança.
 - `API-003` valida autenticação, autorização administrativa, criação `201` e consulta do produto.
 - `API-004` valida a regra de unicidade do e-mail e o contrato de erro `400`.
+- `API-005` altera os dados de um usuário e confirma a persistência pelo mesmo identificador.
+- `API-006` valida o login bem-sucedido e a estrutura do token Bearer retornado.
 
 ## Riscos e decisões
 
@@ -39,7 +41,7 @@ fornece IDs individuais.
 ## Próximos candidatos de API
 
 - acesso administrativo sem token ou com token inválido;
-- edição de usuários e produtos;
+- edição de produtos;
 - carrinho, conclusão e cancelamento de compra;
 - consultas com filtros e recursos inexistentes;
 - validação ampliada de schemas e cabeçalhos de segurança.
